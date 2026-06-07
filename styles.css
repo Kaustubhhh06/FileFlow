@@ -85,24 +85,30 @@ button {
 }
 
 .site-header {
-  position: sticky;
-  top: 14px;
+  position: fixed;
+  top: 18px;
+  left: 50%;
   z-index: 20;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  width: min(100%, var(--max-width));
-  margin: 0 auto;
+  width: min(calc(100% - clamp(32px, 6vw, 72px)), var(--max-width));
+  margin: 0;
   padding: 10px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: rgba(255, 255, 255, 0.62);
   box-shadow: 0 14px 42px rgba(54, 72, 112, 0.12);
   backdrop-filter: blur(18px);
+  transform: translateX(-50%);
 }
 
 body.dark-theme .site-header {
   background: rgba(18, 22, 34, 0.74);
+}
+
+main {
+  padding-top: 76px;
 }
 
 .brand {
@@ -1084,10 +1090,16 @@ body.dark-theme .tech-stack span {
 
   .site-header {
     grid-template-columns: 1fr auto;
+    top: 12px;
+    width: calc(100% - 28px);
   }
 
   .header-nav {
     display: none;
+  }
+
+  main {
+    padding-top: 66px;
   }
 
   .hero-section {
