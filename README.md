@@ -4,6 +4,16 @@ Organize messy files instantly with drag-and-drop categorization and ZIP export.
 
 FileFlow is a browser-based file organizer built with HTML, CSS, JavaScript, and JSZip. Users can drag and drop or choose files, preview smart categories, remove files, switch organization modes, and download a clean ZIP file.
 
+## Tech Stack
+
+- HTML
+- CSS
+- JavaScript
+- JSZip
+- Browser File API
+- Drag and Drop API
+- Lucide Icons for UI icons only
+
 ## Features
 
 - Drag and drop upload area
