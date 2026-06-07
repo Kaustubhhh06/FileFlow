@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FileFlow organizes messy folders into clean downloadable ZIP files by type, extension, date, or size.">
+  <title>FileFlow - Smart File Organizer</title>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a href="#app" class="brand" aria-label="FileFlow home">
+        <span class="brand-mark" aria-hidden="true"><i data-lucide="folder-symlink"></i></span>
+        <span>FileFlow</span>
+      </a>
+
+      <nav class="header-nav" aria-label="Primary navigation">
+        <a href="#features">Features</a>
+        <a href="#workflow">Workflow</a>
+        <a href="#app">Organizer</a>
+      </nav>
+
+      <button class="icon-button theme-toggle" id="themeToggle" type="button" title="Toggle theme" aria-label="Toggle dark and light theme">
+        <i data-lucide="moon"></i>
+      </button>
+    </header>
+
+    <main>
+      <section class="hero-section" id="app">
+        <div class="hero-copy">
+          <p class="eyebrow">Browser-based file organization</p>
+          <h1>Transform messy folders into organized file structures instantly.</h1>
+          <p class="hero-text">
+            Drop files into FileFlow and generate a clean ZIP with smart folders for images, documents, videos, audio, code, archives, and everything else.
+          </p>
+
+          <div class="hero-actions">
+            <a class="button primary-button" href="#organizerPanel">
+              <i data-lucide="sparkles"></i>
+              Start organizing
+            </a>
+            <button class="button secondary-button" id="demoButton" type="button">
+              <i data-lucide="wand-2"></i>
+              Load demo set
+            </button>
+          </div>
+        </div>
+
+        <section class="upload-card glass-card" aria-labelledby="uploadTitle">
+          <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-describedby="uploadHint">
+            <input class="file-input" id="fileInput" type="file" multiple aria-label="Choose files to organize">
+            <div class="drop-orbit" aria-hidden="true">
+              <i data-lucide="upload-cloud"></i>
+            </div>
+            <h2 id="uploadTitle">Drop files here</h2>
+            <p id="uploadHint">or choose files from your device</p>
+            <label class="button primary-button choose-button" for="fileInput">
+              <i data-lucide="folder-open"></i>
+              Choose Files
+            </label>
+          </div>
+        </section>
+      </section>
+
+      <section class="stats-grid" aria-label="Uploaded file statistics">
+        <article class="stat-card glass-card">
+          <span class="stat-label">Uploaded files</span>
+          <strong id="fileCount">0</strong>
+          <small id="fileCountNote">Ready for your first batch</small>
+        </article>
+        <article class="stat-card glass-card">
+          <span class="stat-label">Total storage</span>
+          <strong id="totalSize">0 KB</strong>
+          <small>Calculated locally in your browser</small>
+        </article>
+        <article class="stat-card glass-card">
+          <span class="stat-label">Categories used</span>
+          <strong id="categoryCount">0</strong>
+          <small>Smart folders created on export</small>
+        </article>
+        <article class="stat-card glass-card">
+          <span class="stat-label">Largest file</span>
+          <strong id="largestFile">None</strong>
+          <small id="largestFileNote">No files selected</small>
+        </article>
+      </section>
+
+      <section class="organizer-layout" id="organizerPanel">
+        <aside class="control-panel glass-card" aria-label="Organization controls">
+          <div class="panel-heading">
+            <p class="eyebrow">Organization mode</p>
+            <h2>Build your ZIP</h2>
+          </div>
+
+          <div class="mode-grid" role="radiogroup" aria-label="Choose organization mode">
+            <label class="mode-option active">
+              <input type="radio" name="organizeMode" value="type" checked>
+              <span><i data-lucide="folder-tree"></i> Type</span>
+            </label>
+            <label class="mode-option">
+              <input type="radio" name="organizeMode" value="extension">
+              <span><i data-lucide="file-type"></i> Extension</span>
+            </label>
+            <label class="mode-option">
+              <input type="radio" name="organizeMode" value="date">
+              <span><i data-lucide="calendar-days"></i> Date</span>
+            </label>
+            <label class="mode-option">
+              <input type="radio" name="organizeMode" value="size">
+              <span><i data-lucide="scale"></i> Size</span>
+            </label>
+          </div>
+
+          <div class="search-wrap">
+            <i data-lucide="search" aria-hidden="true"></i>
+            <input id="searchInput" type="search" placeholder="Search uploaded files" autocomplete="off">
+          </div>
+
+          <div class="zip-actions">
+            <button class="button primary-button full-button" id="organizeButton" type="button" disabled>
+              <i data-lucide="package-check"></i>
+              Organize Files
+            </button>
+            <button class="button download-button full-button" id="downloadButton" type="button" disabled>
+              <i data-lucide="download"></i>
+              Download Organized ZIP
+            </button>
+            <button class="button ghost-button full-button" id="clearButton" type="button" disabled>
+              <i data-lucide="trash-2"></i>
+              Clear all files
+            </button>
+          </div>
+
+          <div class="status-card" id="statusCard" aria-live="polite">
+            <span class="status-dot"></span>
+            <p>No files selected yet.</p>
+          </div>
+        </aside>
+
+        <section class="workspace">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Dashboard</p>
+              <h2>File intelligence</h2>
+            </div>
+            <span class="pill" id="zipModePill">ZIP mode: Type</span>
+          </div>
+
+          <div class="category-grid" id="categoryGrid" aria-label="File category cards"></div>
+
+          <div class="dashboard-grid">
+            <section class="distribution-card glass-card" aria-labelledby="distributionTitle">
+              <div class="card-heading">
+                <h3 id="distributionTitle">Type distribution</h3>
+                <span id="distributionSummary">0 files</span>
+              </div>
+              <div class="distribution-list" id="distributionList"></div>
+            </section>
+
+            <section class="preview-card glass-card" aria-labelledby="previewTitle">
+              <div class="card-heading">
+                <h3 id="previewTitle">Live preview</h3>
+                <span id="previewSummary">0 visible</span>
+              </div>
+              <div class="preview-list" id="previewList"></div>
+            </section>
+          </div>
+        </section>
+      </section>
+
+      <section class="feature-section" id="features">
+        <div class="section-heading centered">
+          <p class="eyebrow">Premium file handling</p>
+          <h2>Built like a productivity tool</h2>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card glass-card">
+            <i data-lucide="scan-search"></i>
+            <h3>Smart detection</h3>
+            <p>FileFlow maps MIME types and extensions into practical folders before export.</p>
+          </article>
+          <article class="feature-card glass-card">
+            <i data-lucide="bar-chart-3"></i>
+            <h3>Live statistics</h3>
+            <p>Counts, storage, largest files, and distribution bars update as your batch changes.</p>
+          </article>
+          <article class="feature-card glass-card">
+            <i data-lucide="shield-check"></i>
+            <h3>Local-first</h3>
+            <p>Files stay in the browser session. The app has no server and no upload endpoint.</p>
+          </article>
+          <article class="feature-card glass-card">
+            <i data-lucide="sliders-horizontal"></i>
+            <h3>Flexible exports</h3>
+            <p>Organize by type, extension, date, or size and remove files before ZIP generation.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="workflow-section" id="workflow" aria-labelledby="workflowTitle">
+        <div class="section-heading centered">
+          <p class="eyebrow">Three-step flow</p>
+          <h2 id="workflowTitle">Upload -> Organize -> Download</h2>
+        </div>
+        <div class="workflow-grid">
+          <article class="workflow-step">
+            <span>01</span>
+            <h3>Upload</h3>
+            <p>Drop a batch or select files from your device.</p>
+          </article>
+          <article class="workflow-step">
+            <span>02</span>
+            <h3>Organize</h3>
+            <p>Review categories, search, remove, and choose a structure.</p>
+          </article>
+          <article class="workflow-step">
+            <span>03</span>
+            <h3>Download</h3>
+            <p>Export a polished folder structure inside one ZIP.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>FileFlow organizes files locally with HTML, CSS, JavaScript, and JSZip.</p>
+      <a href="#app">Back to organizer</a>
+    </footer>
+  </div>
+
+  <div class="success-overlay" id="successOverlay" aria-hidden="true">
+    <div class="success-modal glass-card" role="status" aria-live="polite">
+      <div class="success-ring">
+        <i data-lucide="check"></i>
+      </div>
+      <h2>Files organized</h2>
+      <p>Your ZIP is ready to download.</p>
+    </div>
+  </div>
+</body>
+</html>
