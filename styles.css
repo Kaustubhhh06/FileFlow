@@ -866,14 +866,16 @@ body.dark-theme .empty-state {
 }
 
 .site-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
   margin-top: 80px;
-  padding: 24px 0 0;
+  padding: 22px;
   color: var(--muted);
-  border-top: 1px solid var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(37, 99, 235, 0.09), rgba(0, 166, 166, 0.07)),
+    var(--surface);
+  box-shadow: 0 18px 48px rgba(54, 72, 112, 0.12);
+  backdrop-filter: blur(18px);
 }
 
 .site-footer p {
@@ -883,6 +885,66 @@ body.dark-theme .empty-state {
 .site-footer a {
   color: var(--text);
   font-weight: 800;
+}
+
+.footer-main,
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.footer-main {
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.footer-bottom {
+  padding-top: 16px;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-brand strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text);
+  font-size: 1.05rem;
+}
+
+.footer-links,
+.tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.footer-links a,
+.tech-stack span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.38);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+body.dark-theme .footer-links a,
+body.dark-theme .tech-stack span {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tech-stack span {
+  color: var(--accent-2);
 }
 
 .success-overlay {
@@ -1050,9 +1112,15 @@ body.dark-theme .empty-state {
   .section-heading,
   .panel-heading,
   .card-heading,
-  .site-footer {
+  .footer-main,
+  .footer-bottom {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .footer-links,
+  .tech-stack {
+    justify-content: flex-start;
   }
 
   .pill {
